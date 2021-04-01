@@ -24,6 +24,14 @@
 <div class="container mx-auto px-4 py-10">
     <div class="md:flex -mx-4">
         <div class="w-2/4 px-4">
+            @if(!empty($errors))
+            <ul class="text-red-500">
+                @foreach ($errors->all() as $message)
+                <li>- {{ $message }}</li>
+                @endforeach
+            </ul>
+            @endif
+
             <form class="bg-white rounded-lg shadow px-4 py-4 mb-8" action="{{ route('user.hwack') }}" method="POST"
                 enctype="multipart/form-data">
                 <input type="hidden" name="user_id" value="{{ $user->id }}">
@@ -33,13 +41,13 @@
                     rows="3" placeholder="What's happening..."></textarea>
 
                 <input multiple name="image" id="image" class="" type="file"
-                    accept="image/png, image/jpeg, image/webp, image/jpg, image/bmp,image/gif, image/svg">
+                    accept="image/jpg, image/png, image/webp, image/gif">
 
                 <br>
 
                 <label for="private" class="mt-6">
                     Private
-                    <input type="checkbox" name="private">
+                    <input type="checkbox" name="private" value="1">
                 </label>
 
                 <div class="flex items-center justify-end">

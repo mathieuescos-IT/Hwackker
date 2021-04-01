@@ -29,6 +29,8 @@ class RegisterController extends Controller
         $path_img = "uploads/$avatarname";
         $data_users = $request->all();
         $data_users['profile_picture'] = $path_img;
+        $password_hash = bcrypt($data_users['password']);
+        $data_users['password'] = $password_hash;
         unset($data_users['_token']);
         unset($data_users['password_confirmation']);
 

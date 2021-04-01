@@ -26,7 +26,7 @@ class UserController extends Controller
         $user = auth()->user();
 
         if (!$user) {
-            return redirect()->route('home');
+            return redirect()->route('user');
         }
 
         return view('user', [
@@ -39,24 +39,24 @@ class UserController extends Controller
     {
         $request->validate([
             'image' => 'required|mimes:jpg,png,gif,webp',
-            'content' => 'required|string|max:500',
-            'private' => 'accepted',
+            'content' => 'required|max:500',
+            'private' => 'nullable',
         ]);
 
         $data_hwack = $request->all();
 
         // Check if img is uploaded
         if ($request->hasFile('image')) {
-            $avatarname = time() . '.' . $request->profile_picture->extension();
-            $request->profile_picture->move(public_path('uploads/hwack'), $avatarname);
-            $path_img = "uploads/hwack/$avatarname";
+            $avatarname = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('uploads'), $avatarname);
+            $path_img = "uploads/$avatarname";
             $data_hwack['image'] = $path_img;
         }
 
-        // Check if provate is checked
-        if(in_array('private', $request->get('private'))){
+        // Check if private is checked
+        $checkbox = $request->input('private');
+        if($checkbox){
             $data_hwack['private'] = true;
-            var_dump($data_hwack);
         }
 
         unset($data_hwack['_token']);

@@ -19,15 +19,15 @@ class LoginController extends Controller
         $user = User::where([
             'username' => $request->username,
         ])->first();
-        
-        // If user doesn't exist or password is not correct
-        if(!$user->password  || !Hash::check($user->password,$request->password)){
+
+        $check_password = Hash::check($request->password, $user->password);
+        if($user && $check_password){
+            auth()->loginUsingId($user->id);
+            return redirect()->route('user', ['username' => $user->username]);
+        } else {
             throw ValidationException::withMessages([
                 'username' => ['The provided credentials are incorrect.'],
             ]);
-        } else {
-            auth()->loginUsingId($user->id);
-            return redirect()->route('user', ['username' => $user->username]);
         }
     }
 }
